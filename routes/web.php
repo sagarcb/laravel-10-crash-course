@@ -96,4 +96,5 @@ Route::get('/auth/callback', function () {
 Route::middleware('auth')->group(function (){
     Route::resource('/ticket', TicketController::class);
     Route::patch('/ticket/update/status/{ticket}', [TicketController::class, 'updateStatus'])->name('ticket.update.status');
+    Route::post('/ticket/reply/{ticket}', [TicketController::class, 'replyTicket'])->name('ticket.reply');
 });

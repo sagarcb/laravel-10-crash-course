@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTicketReplyRequest;
 use App\Http\Requests\UpdateTicketStatusRequest;
+use App\Models\Reply;
 use App\Models\Ticket;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 use App\Models\User;
 use App\Notifications\TicketUpdatedNotification;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -104,6 +107,17 @@ class TicketController extends Controller
     {
         $ticket->delete();
         return redirect(route('ticket.index'));
+    }
+
+    public function replyTicket(StoreTicketReplyRequest $request, Ticket $ticket)
+    {
+        $reply = Reply::create([
+            'body' => $request->body,
+            'user_id' => Auth::id(),
+            'ticket_id' => $ticket->id
+        ]);
+
+        return back();
     }
 
     protected function storeAttachment($request, $ticket) {
